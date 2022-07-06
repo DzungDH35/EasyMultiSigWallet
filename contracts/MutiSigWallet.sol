@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import "../intefaces/IERC20.sol";
+import "../interfaces/IERC20.sol";
 import "./EasyToken.sol";
 
 contract MultiSigWallet {
@@ -47,13 +47,13 @@ contract MultiSigWallet {
    mapping(address => bool) public isOwner;
    uint public requiredSigs; // number of required signatures for a transaction execution
 
-   IERC20 public token;
+   IERC20 public MyEasyToken;
 
    struct Transaction {
-      address destination;
-      uint value;
-      bytes data;
-      bool executed;
+      address proposer; // who requests the transaction of token transfer
+      address destination; // who will receive a number of tokens
+      uint value; // value of tokens to be transferred
+      bool executed; // transaction status of execution
    }
    mapping(uint => Transaction) public transactions; // id => information
    uint public transactionCount = 0;
@@ -119,7 +119,7 @@ contract MultiSigWallet {
    constructor(address[] memory _owners, uint _requiredSigs)
       validRequirement(_owners.length, _requiredSigs)
    {
-      token = new EasyToken(100000);
+      MyEasyToken = new EasyToken(1000);
       for (uint i = 0; i < _owners.length; ++i) {
          require(_owners[i] != address(0), ADDRESS_NOT_NULL_MSG);
          require(!isOwner[_owners[i]], OWNER_EXISTENCE_MSG);
@@ -131,6 +131,12 @@ contract MultiSigWallet {
 
    // fallback function
    fallback() external payable {
+      if (msg.value > 0) {
+         emit Deposit(msg.sender, msg.value);
+      }
+   }
+
+   receive() external payable {
       if (msg.value > 0) {
          emit Deposit(msg.sender, msg.value);
       }
@@ -197,25 +203,25 @@ contract MultiSigWallet {
       emit SigRequirementChange(_requiredSigs);
    }
 
-   function submitTransaction(address _destination, uint _value, bytes memory _data) 
+   function submitTransaction(address _destination, uint _value) 
       public
       returns (uint _transactionId)
    {
-      _transactionId = addTransaction(_destination, _value, _data);
+      _transactionId = addTransaction(_destination, _value);
       confirmTransaction(_transactionId);
    }
 
    // Add a new transaction if it has not existed yet
-   function addTransaction(address _destination, uint _value, bytes memory _data) 
+   function addTransaction(address _destination, uint _value) 
       internal
       notNullAddress(_destination)
       returns (uint _transactionId)
    {
       _transactionId = transactionCount;
       transactions[_transactionId] = Transaction({
+         proposer: msg.sender,
          destination: _destination,
          value: _value,
-         data: _data,
          executed: false
       });
       transactionCount += 1;
@@ -265,12 +271,14 @@ contract MultiSigWallet {
    {
       if (isConfirmed(_transactionId)) {
          Transaction memory transaction = transactions[_transactionId];
-         transaction.executed = true;
-         if (transaction.destination.call.value(transaction.value)(transaction.data))
+         transactions[_transactionId].executed = true;
+
+         if (MyEasyToken.transfer(transaction.destination, transaction.value))
             emit Execution(_transactionId);
-         else
-            transaction.executed = false;
+         else {
+            transactions[_transactionId].executed = false;
             emit ExecutionFailure(_transactionId);
+         }
       }
    }
 
@@ -314,5 +322,13 @@ contract MultiSigWallet {
       _transactionIds = new uint[](_to - _from);
       for (i = _from; i < _to; ++i)
          _transactionIds[i - _from] = transactionIdsTemp[i];
+   }
+
+   function totalSupply() public view returns (uint256) {
+      return MyEasyToken.totalSupply();
+   }
+
+   function balanceOf(address _tokenOwner) public view returns (uint256) {
+      return MyEasyToken.balanceOf(_tokenOwner);
    }
 }
