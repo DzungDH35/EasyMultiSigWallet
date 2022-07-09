@@ -7,8 +7,8 @@ contract EasyToken is IERC20 {
    string private constant NOT_ENOUGH_BALANCE_MSG = "Balance is not enough!";
    string private constant NOT_ENOUGH_ALLOWANCE_MSG = "Allowance is not enough!";
 
-   string public constant name = "EasyToken";
-   string public constant symbol = "EZT";
+   string private constant _name = "EasyToken";
+   string private constant _symbol = "EZT";
    uint256 private _totalSupply;
 
    mapping(address => uint256) balances;
@@ -75,5 +75,13 @@ contract EasyToken is IERC20 {
       allowed[msg.sender][_delegate] = _token;
       emit Approval(msg.sender, _delegate, _token);
       return true;
+   }
+
+   function name() public pure returns (string memory) {
+      return _name;
+   }
+
+   function symbol() public pure returns (string memory) {
+      return _symbol;
    }
 }
