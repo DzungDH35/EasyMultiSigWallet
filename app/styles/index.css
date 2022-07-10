@@ -1,9 +1,16 @@
 @import './default/normalize.css';
-@import './component/header.css';
 @import './shared.css';
 
 #main-container {
    min-height: calc(100vh - 75px);
+}
+
+header {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 75px;
+   background-color: #f2f4f6;
 }
 
 #login-container {
@@ -72,40 +79,3 @@
 #connect-metamask:hover {
    background-color: #2295ea;
 }
-
-
-
-/* below is stored */
-
-
-.menu-bar {
-   border-bottom: 1px solid #d6d9dc;
-   display: flex;
-   justify-content: center;
-   padding: 4px 0;
-}
-
-.account-wrapper {
-   align-items: center;
-   background-color: #f2f4f6;
-   border-radius: 10px;
-   display: flex;
-   flex-direction: column;
-   padding: 6px 120px;
-   row-gap: 4px;
-}
-
-/* .account-wrapper:hover {
-   background-color: #f2f4f6;
-} */
-
-.account-name {
-   line-height: 140%;
-}
-
-.account-address-wrapper {
-   font-size: 0.75rem;
-   display: flex;
-   column-gap: 3px;
-}
-
