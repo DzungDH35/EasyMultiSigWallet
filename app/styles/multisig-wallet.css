@@ -44,6 +44,10 @@ header {
    background-color: #f2f4f6;
 }
 
+.account-wrapper > :nth-child(2) {
+   margin-top: 8px;
+}
+
 .account-name {
    line-height: 140%;
 }

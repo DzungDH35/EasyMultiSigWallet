@@ -24,33 +24,33 @@ let accountViewModel = {
    setAddress: function (newAddress) {
       this.address = newAddress;
       for (let boundDOMElement of this.bindings.address) {
-         updateAddressView(boundDOMElement);
+         this.updateAddressView(boundDOMElement);
       }
    },
 
    setName: function (newName) {
       this.newName = newName;
       for (let boundDOMElement of this.bindings.newName) {
-         updateAddressView(boundDOMElement);
+         this.updateAddressView(boundDOMElement);
       }
    },
 
    setBalance: function (newBalance) {
       this.newBalance = newBalance;
       for (let boundDOMElement of this.bindings.newBalance) {
-         updateBalanceView(boundDOMElement);
+         this.updateBalanceView(boundDOMElement);
       }
    },
 
    updateAddressView: function (DOMElement) {
-      DOMElement.innerHtml = this.address;
+      DOMElement.innerHTML  = this.address;
    },
 
    updateNameView: function (DOMElement) {
-      DOMElement.innerHtml = this.name;
+      DOMElement.innerHTML  = this.name;
    },
 
    updateBalanceView: function (DOMElement) {
-      DOMElement.innerHtml = this.balance;
+      DOMElement.innerHTML  = this.balance;
    }
 };
