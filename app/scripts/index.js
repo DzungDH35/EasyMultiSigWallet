@@ -12,11 +12,6 @@ if (Metamask == undefined || !Metamask.isMetaMask) {
          window.location.replace(MSW_URL);
       }
       else {
-         window.ethereum.on('connect', data => {
-            console.log('connected');
-            // window.location.replace(MSW_URL);
-         });
-
          document.querySelector('#connect-metamask').addEventListener('click', event => {
             event.target.disabled = true;
             document.querySelector('#connect-metamask').style.opacity = 0.5;
@@ -24,6 +19,7 @@ if (Metamask == undefined || !Metamask.isMetaMask) {
             Metamask.request({ method: 'eth_requestAccounts' })
                .then(data => {
                   console.log(data);
+                  window.location.replace(MSW_URL);
                })
                .catch(error => {
                   console.log(error);

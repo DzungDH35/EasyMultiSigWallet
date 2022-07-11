@@ -49,19 +49,21 @@ header {
 }
 
 .account-name {
+   font-size: 1rem;
+   font-weight: 500;
    line-height: 140%;
 }
 
 .account-address-wrapper {
-   font-size: 0.75rem;
    display: flex;
-   column-gap: 3px;
+   column-gap: 8px;
+   font-size: 0.85rem;
 }
 
 .balance-wrapper {
    display: flex;
    flex-direction: column;
-   padding: 50px 0 ;
+   padding: 70px 0 ;
 }
 
 .balance-wrapper > :nth-child(2) {
@@ -106,4 +108,31 @@ header {
 .control-button__text {
    line-height: 140%;
    color: #037dd6;
+}
+
+.record-tab-group {
+   display: flex;
+   border: none;
+   box-shadow: 0 3px 4px rgb(135 134 134 / 16%);
+}
+
+.record-tab-group > * {
+   flex-basis: 50%;
+   flex-shrink: 0;
+}
+
+.record-tab {
+   padding: 16px 8px;
+   text-align: center;
+   cursor: pointer;
+}
+
+.record-tab--active {
+   border-bottom: 2px solid #037dd6;
+   font-weight: 500;
+   color: #037dd6;
+}
+
+.record-content-wrapper {
+   height: 100px;
 }
