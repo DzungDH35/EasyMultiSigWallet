@@ -5,7 +5,7 @@ let accountViewModel = {
    address: '0x0000000000000000000000000000000000000000',
    name: '',
    balance: 0,
-   balanceSymbol: '',
+   tokenName: '',
    bindings: {
       address: [],
       name: [],
@@ -37,7 +37,14 @@ let accountViewModel = {
    },
 
    setBalance: function (newBalance) {
-      this.newBalance = newBalance;
+      this.balance = newBalance;
+      for (let boundDOMElement of this.bindings.balance) {
+         this.updateBalanceView(boundDOMElement);
+      }
+   },
+
+   setTokenName: function (newTokenName) {
+      this.tokenName = newTokenName;
       for (let boundDOMElement of this.bindings.balance) {
          this.updateBalanceView(boundDOMElement);
       }
@@ -52,7 +59,7 @@ let accountViewModel = {
    },
 
    updateBalanceView: function (DOMElement) {
-      DOMElement.innerHTML  = this.balance + '' + this.balanceSymbol;
+      DOMElement.innerHTML  = this.balance + ' ' + this.tokenName;
    }
 };
 

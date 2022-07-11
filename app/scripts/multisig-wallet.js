@@ -451,6 +451,7 @@ const METAMASK_CONNECT_FAILED_MSG = 'Cannot connect to metamask. Please reload t
 const METAMASK_ACCOUNT_REQUEST_FAILED_MSG = 'Fail to request for MetaMask accounts!';
 
 function setUpMetaMaskEvent() {
+   let self = this;
    Metamask.on('disconnect', error => {
       alert(METAMASK_CONNECT_FAILED_MSG);
       console.log(error);
@@ -458,6 +459,7 @@ function setUpMetaMaskEvent() {
 
    Metamask.on('accountsChanged', (accountAddresses) => {
       accountViewModel.setAddress(accountAddresses[0]);
+      updateViewBasedOnAccount();
    });
 
    Metamask.on('chainChanged', (chainId) => {
@@ -472,27 +474,34 @@ function setUpViewModel() {
    recordTabs.init();
 }
 
+function updateViewBasedOnAccount() {
+   mswContract.methods.balanceOf(accountViewModel.address).call((err, balance) => {
+      if (err) {
+         console.log(err);
+      } else {
+         accountViewModel.setBalance(balance);
+      }
+   });
+   eztContract.methods.name().call((err, tokenName) => {
+      if (err) {
+         console.log(err);
+      } else {
+         accountViewModel.setTokenName(tokenName);
+      }
+   });
+}
+
 function bootstrap() {
    mswContract = new web3.eth.Contract(MSW_CONTRACT_ABI, MSW_CONTRACT_ADDR);
+   eztContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI, TOKEN_CONTRACT_ADDR);
+
    setUpMetaMaskEvent();
    setUpViewModel();
+
    Metamask.request({ method: 'eth_requestAccounts' })
       .then(accountAddresses => {
          accountViewModel.setAddress(accountAddresses[0]);
-         mswContract.methods.balanceOf(accountViewModel.address).call((err, balance) => {
-            if (err) {
-               console.log(err);
-            } else {
-               accountViewModel.setBalance(balance);
-            }
-         });
-         mswContract.methods.balanceOf(accountViewModel.address).call((err, balance) => {
-            if (err) {
-               console.log(err);
-            } else {
-               accountViewModel.setBalance(balance);
-            }
-         });
+         updateViewBasedOnAccount();
       })
       .catch(error => {
          console.log(error);
