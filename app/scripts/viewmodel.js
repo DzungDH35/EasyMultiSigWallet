@@ -30,14 +30,14 @@ let accountViewModel = {
 
    setName: function (newName) {
       this.newName = newName;
-      for (let boundDOMElement of this.bindings.newName) {
+      for (let boundDOMElement of this.bindings.name) {
          this.updateAddressView(boundDOMElement);
       }
    },
 
    setBalance: function (newBalance) {
       this.newBalance = newBalance;
-      for (let boundDOMElement of this.bindings.newBalance) {
+      for (let boundDOMElement of this.bindings.balance) {
          this.updateBalanceView(boundDOMElement);
       }
    },
