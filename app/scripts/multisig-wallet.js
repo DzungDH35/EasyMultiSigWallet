@@ -978,12 +978,17 @@ function bootstrap() {
 		});
 
 		document.querySelector('.popup-submit-trx').addEventListener('click', event => {
-			let transferTo = document.querySelectorAll('.popup-field-input')[0].value,
+			let sender = document.querySelector('.popup-field__content--from').innerHTML,
+				receipt = document.querySelectorAll('.popup-field-input')[0].value,
 				tokens = document.querySelectorAll('.popup-field-input')[1].value;
 
-			// mswContract.methods.submitTransaction(transferTo, tokens).call((err, data) => {
+			console.log(sender, receipt, tokens);
 
-			// });
+			mswContract.methods
+				.submitTransaction(receipt, tokens)
+				.send({ from: sender }, function (err, data) {
+					console.log(data);
+			});
 		});
 	});
 }
