@@ -1,4 +1,5 @@
 @import './arrow.css';
+@import 'loader.css';
 
 #multisig-wallet {
    min-height: 100vh;

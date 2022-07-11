@@ -188,13 +188,17 @@ let chainNetworkViewModel = {
 let popUpViewModel = {
    data: {
       title: '',
-      template: document.getElementById('popup-template').content,
-      type: ''
+      popupTemplate: document.getElementById('popup-template').content,
+      tokenTransferTemplate: document.getElementById('popup-template--token-transfer').content
    },
    selector: {
       identifier: 'overlay-container__popup',
       title: '.popup-title',
-      close: '.popup-close'
+      close: '.popup-close',
+      body: '.popup-body',
+      input: '.popup-field-input',
+      submit: '.popup-submit-trx',
+      from: '.popup-field__content--from'
    },
    wrapper: null,
 
@@ -208,13 +212,24 @@ let popUpViewModel = {
 
       this.wrapper = config.wrapper;
       this.wrapper.style.zIndex = 10;
-      this.wrapper.appendChild(this.data.template.cloneNode(true));
+      this.wrapper.appendChild(this.data.popupTemplate.cloneNode(true));
       document.querySelector(this.selector.close).addEventListener('click', event => {
          self.destroy();
       });
 
       if (config.type === 'tokenTransfer') {
          this.setTitle('Transfer tokens');
+         document.querySelector(this.selector.body).appendChild(this.data.tokenTransferTemplate.cloneNode(true));
+         document.querySelector(this.selector.from).innerHTML = config.transferFrom;
+
+         let transferTo = document.querySelectorAll(this.selector.input)[0],
+             tokens = document.querySelectorAll(this.selector.input)[1];
+
+         for (let input of document.querySelectorAll(this.selector.input)) {
+            input.addEventListener('input', event => {
+               document.querySelector(this.selector.submit).disabled = transferTo.value === '' || tokens.value === '';
+            });
+         }
       }
    },
 

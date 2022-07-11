@@ -72,7 +72,9 @@
             </div>
          </div>
       </div>
-      <div class="overlay-container">
+      <div class="overlay-container"></div>
+      <div class="loader-overlay-wrapper">
+         <div class="loader"></div>
       </div>
    </div>
    <template id="popup-template">
@@ -81,22 +83,25 @@
             <div class="popup-title"></div>
             <i class="fa fa-close popup-close" style="font-size:20px"></i>
          </div>
-         <div class="popup-body">
-            <div class="popup-field">
-               <div class="popup-field__title">From:</div>
-               <div class="popup-field__content">0x7Fcc8505961AA55316F3B29C951070e5d65b7fD4</div>
-            </div>
-            <div class="popup-field">
-               <div class="popup-field__title">To:</div>
-               <div class="popup-field__content">0x7Fcc8505961AA55316F3B29C951070e5d65b7fD4</div>
-            </div>
-            <div class="popup-field">
-               <div class="popup-field__title">Number of tokens:</div>
-               <input type="number" min="0">
-            </div>
-         </div>
+         <div class="popup-body"></div>
       </div>
    </template>
+   <template id="popup-template--token-transfer">
+      <div class="popup-field">
+         <div class="popup-field__title">From:</div>
+         <div class="popup-field__content popup-field__content--from"></div>
+      </div>
+      <div class="popup-field">
+         <div class="popup-field__title">To:</div>
+         <input class="popup-field-input" type="text">
+      </div>
+      <div class="popup-field">
+         <div class="popup-field__title">Number of tokens:</div>
+         <input class="popup-field-input" type="number" min="0">
+      </div>
+      <button class="popup-submit-trx" disabled>Submit Transaction</button>
+   </template>
+   <script src="./scripts/loader.js"></script>
    <script src="./node_modules/web3/dist/web3.min.js"></script>
    <script src="./scripts/viewmodel.js"></script>
    <script src="./scripts/multisig-wallet.js"></script>

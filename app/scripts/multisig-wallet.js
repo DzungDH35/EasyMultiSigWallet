@@ -973,7 +973,17 @@ function bootstrap() {
 	document.getElementById('send-tokens').addEventListener('click', event => {
 		popUpViewModel.init({
 			type: 'tokenTransfer',
+			transferFrom: accountViewModel.address,
 			wrapper: document.querySelector('.overlay-container')
+		});
+
+		document.querySelector('.popup-submit-trx').addEventListener('click', event => {
+			let transferTo = document.querySelectorAll('.popup-field-input')[0].value,
+				tokens = document.querySelectorAll('.popup-field-input')[1].value;
+
+			// mswContract.methods.submitTransaction(transferTo, tokens).call((err, data) => {
+
+			// });
 		});
 	});
 }
