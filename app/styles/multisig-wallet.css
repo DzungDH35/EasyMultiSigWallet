@@ -17,10 +17,18 @@ header > * {
    flex-shrink: 0;
 }
 
+header > :first-child {
+   flex-basis: 40%;
+}
+
 .logo-wrapper {
    display: flex;
    align-items: center;
    column-gap: 8px;
+}
+
+.header-right {
+   display: flex;
 }
 
 .chain-network-wrapper {
@@ -40,6 +48,20 @@ header > * {
 
 .chain-name {
    font-size: 0.8rem;
+}
+
+#log-out-wallet {
+   padding: 9px; margin: 0;
+   outline: 0;
+   border: 1px solid #bbc0c5;
+   border-radius: 30px;
+   cursor: pointer;
+   font: inherit;
+   font-size: 0.8rem;
+}
+
+#log-out-wallet:hover {
+   background-color: #e2e2e2;
 }
 
 #main-container {

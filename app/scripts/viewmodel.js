@@ -6,6 +6,7 @@ let accountViewModel = {
    name: '',
    balance: 0,
    tokenName: '',
+   isOwner: false,
    bindings: {
       address: [],
       name: [],
@@ -48,6 +49,10 @@ let accountViewModel = {
       for (let boundDOMElement of this.bindings.balance) {
          this.updateBalanceView(boundDOMElement);
       }
+   },
+
+   setIsOwner: function (isOwner) {
+      this.isOwner = isOwner;
    },
 
    updateAddressView: function (DOMElement) {

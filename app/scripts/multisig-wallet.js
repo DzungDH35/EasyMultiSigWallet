@@ -1,7 +1,10 @@
 const INDEX_URL = '/index.html';
 const MSW_CONTRACT_ADDR = window.sessionStorage.getItem('wallet-contract-address');
+
 if (MSW_CONTRACT_ADDR == undefined)
 	window.location.replace(INDEX_URL)
+else
+	document.querySelector('.wallet-address').innerHTML = MSW_CONTRACT_ADDR;
 	
 const MSW_CONTRACT_ABI = [
 	{
@@ -455,8 +458,6 @@ const METAMASK_ACCOUNT_REQUEST_FAILED_MSG = 'Fail to request for MetaMask accoun
 const WALLET_LOG_OUT_CONFIRM_MSG = 'Are you sure you want to log out of your wallet?';
 
 function setUpMetaMaskEvent() {
-   let self = this;
-
    Metamask.on('disconnect', error => {
       alert(METAMASK_CONNECT_FAILED_MSG);
       console.log(error);
@@ -505,6 +506,7 @@ function updateViewBasedOnAccount() {
          accountViewModel.setBalance(balance);
       }
    });
+
    eztContract.methods.name().call((err, tokenName) => {
       if (err) {
          console.log(err);
@@ -512,6 +514,10 @@ function updateViewBasedOnAccount() {
          accountViewModel.setTokenName(tokenName);
       }
    });
+
+	mswContract.methods.isOwner().call((err, res) => {
+		console.log(res);
+	});
 }
 
 function bootstrap() {
