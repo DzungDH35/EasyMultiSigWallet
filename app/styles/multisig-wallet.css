@@ -216,8 +216,88 @@ header > :first-child {
    color: #037dd6;
 }
 
-.record-content-wrapper {
-   height: 100px;
+.record-item {
+   display: flex;
+   justify-content: space-between;
+   border-top: 1px solid #d6d9dc;
+   border-bottom: 1px solid #d6d9dc;
+   padding: 24px 16px;
+   font-size: 1rem;
+}
+
+.record-item__left-wrapper {
+   display: flex;
+   align-items: center;
+   column-gap: 18px;
+}
+
+.record-item__left-wrapper > :nth-child(2) {
+   display: flex;
+   flex-direction: column;
+   row-gap: 10px;
+}
+
+.record-item__right-wrapper {
+   display: flex;
+   align-items: center;
+   padding-right: 30px;
+   font-size: 1.5rem;
+   font-weight: 500;
+   column-gap: 8px;
+}
+
+.record-item-token-wrapper {
+   display: flex;
+   font-size: 0.85rem;
+   column-gap: 5px;
+}
+
+.record-item-status {
+   width: 24px;
+   height: 24px;
+   border: 1px solid #000;
+}
+
+.record-item-flow-wrapper {
+   display: flex;
+   align-items: center;
+   font-size: 0.85rem;
+   column-gap: 15px;
+}
+
+.record-item-trxId {
+   display: flex;
+   column-gap: 8px;
+   font-size: 1.1rem;
+   font-weight: 500;
+}
+
+.record-item-address {
+   display: flex;
+   column-gap: 5px;
+}
+
+.record-item-address > :nth-child(2) {
+   max-width: 160px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+.record-item-flow-icon {
+   color: #bbc0c5;
+   background-color: #fff;
+   border: 1px solid #d6d9dc;
+   border-radius: 100%;
+   width: 25px;
+   aspect-ratio: 1;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.record-item-flow-icon svg {
+   width: 14px;
+   fill: #bbc0c5;
 }
 
 .overlay-container {

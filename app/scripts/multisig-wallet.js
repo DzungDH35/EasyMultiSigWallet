@@ -991,6 +991,27 @@ function bootstrap() {
 			});
 		});
 	});
+
+	mswContract.methods.requiredSigs().call((err, requiredSigs) => {
+		trxViewModel.requiredSigs = requiredSigs;
+	});
+
+	mswContract.methods.transactionCount().call((err, trxCount) => {
+		let promiseObj = [];
+		let t;
+		console.log(trxCount);
+		for (let i = 0; i < trxCount; ++i) {
+			mswContract.methods.transactions(i).call((err, trx) => {
+				trxViewModel.trx.push(trx);
+				trxViewModel.renderRecordItem();
+
+				mswContract.methods.getConfirmationCount(i).call((err, confirmCount) => {
+					trxViewModel.trx[i].confirmCount = confirmCount;
+				});
+			});
+			console.log(t);
+		}
+	});
 }
 
 if (typeof web3 !== 'undefined')

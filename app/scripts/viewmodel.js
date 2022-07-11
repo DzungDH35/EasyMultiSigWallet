@@ -238,3 +238,18 @@ let popUpViewModel = {
       this.wrapper.style.zIndex = -1;
    }
 };
+
+let trxViewModel = {
+   trx: [],
+   requiredSigs: 0,
+   itemTemplate: document.getElementById('record-item').content,
+   recordContentSelector: '.record-content-wrapper',
+
+   renderRecordItem: function() {
+      let itemNode = this.itemTemplate.cloneNode(true);
+      
+      for (let transaction of this.trx) {
+         document.querySelector(this.recordContentSelector).appendChild(itemNode);
+      }
+   }
+};
