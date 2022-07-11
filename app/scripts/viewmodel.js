@@ -125,15 +125,6 @@ let walletViewModel = {
    }
 };
 
-let recordViewModel = {
-   activity: {
-
-   },
-   pendingTrx: {
-
-   }
-};
-
 let recordTabs = {
    tabGroupWrapperClass: 'record-tab-wrapper',
    tabGroupClass: 'record-tab-group',
@@ -191,5 +182,44 @@ let chainNetworkViewModel = {
       this.chainId = parseInt(newChainHexId.toString(16), 16);
       document.querySelector('.chain-symbol').style.backgroundColor = this.bgColor[this.chainId];
       document.querySelector('.chain-name').innerHTML = this.name[this.chainId]
+   }
+};
+
+let popUpViewModel = {
+   data: {
+      title: '',
+      template: document.getElementById('popup-template').content,
+      type: ''
+   },
+   selector: {
+      identifier: 'overlay-container__popup',
+      title: '.popup-title',
+      close: '.popup-close'
+   },
+   wrapper: null,
+
+   setTitle: function (title) {
+      this.title = title;
+      document.querySelector(this.selector.title).innerHTML = title;
+   },
+
+   init: function (config) {
+      let self = this;
+
+      this.wrapper = config.wrapper;
+      this.wrapper.style.zIndex = 10;
+      this.wrapper.appendChild(this.data.template.cloneNode(true));
+      document.querySelector(this.selector.close).addEventListener('click', event => {
+         self.destroy();
+      });
+
+      if (config.type === 'tokenTransfer') {
+         this.setTitle('Transfer tokens');
+      }
+   },
+
+   destroy: function () {
+      document.getElementById(this.selector.identifier).remove();
+      this.wrapper.style.zIndex = -1;
    }
 };

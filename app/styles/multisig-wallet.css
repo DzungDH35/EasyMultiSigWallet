@@ -4,6 +4,7 @@
 #multisig-wallet {
    background-color: #f2f4f6;
    color: #24272a;
+   position: relative;
 }
 
 header {
@@ -217,4 +218,82 @@ header > :first-child {
 
 .record-content-wrapper {
    height: 100px;
+}
+
+.overlay-container {
+   position: absolute;
+   top: 0;
+   z-index: -1;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 100%; height: 100%;
+   background-color: #0000005a;
+}
+
+.popup {
+   min-width: 330px;
+   max-height: 94vh;
+   border-radius: 10px;
+   box-shadow: 0 4px 30px rgb(0 0 0 / 25%);
+   background-color: #fff;
+}
+
+.popup-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 24px 16px 16px;
+}
+
+.popup-title {
+   line-height: 140%;
+   font-size: 1.125rem;
+   font-weight: 700;
+}
+
+.popup-close {
+   cursor: pointer;
+}
+
+.popup-body {
+   display: flex;
+   flex-direction: column;
+   row-gap: 24px;
+   padding: 16px;
+   margin-top: 8px;
+}
+
+.popup-field {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   column-gap: 60px;
+   font-size: 14px;
+}
+
+.popup-field input {
+   border: none;
+   border-bottom: 1px solid #24272a;
+   outline: none;
+   padding: 0 3px;
+   font: inherit;
+}
+
+.popup-field > :first-child {
+   flex-shrink: 0;
+}
+
+.popup-field > :nth-child(2) {
+   flex-shrink: 0;
+}
+
+.popup-field__title {
+   font-weight: 600;
+}
+
+.popup-field__content {
+   max-width: 160px;
+   overflow: hidden;
+   text-overflow: ellipsis;
 }

@@ -931,7 +931,7 @@ function setUpViewModel() {
    accountViewModel.setBinding(document.querySelector('.account-balance'), 'balance');
 	walletViewModel.setBindings(document.querySelector('.wallet-balance'), 'tokenBalance');
 	walletViewModel.setBindings(document.querySelector('.wallet-address'), 'address');
-   recordTabs.init();
+	recordTabs.init();
 }
 
 function bootstrap() {
@@ -968,7 +968,13 @@ function bootstrap() {
 		let viewControl = isFlexDisplay ? 'up' : 'down';
 		document.querySelector('.account-view-control > i').classList.value = 'arrow' + ' ' + viewControl;
 		document.querySelector('.account-balance-wrapper').style.display = isFlexDisplay ? 'none' : 'flex';
+	});
 
+	document.getElementById('send-tokens').addEventListener('click', event => {
+		popUpViewModel.init({
+			type: 'tokenTransfer',
+			wrapper: document.querySelector('.overlay-container')
+		});
 	});
 }
 
