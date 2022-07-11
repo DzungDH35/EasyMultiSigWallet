@@ -332,19 +332,19 @@ contract MultiSigWallet {
       return MyEasyToken.balanceOf(_tokenOwner);
    }
 
-   function _isOwner(address _owner) public view returns (bool) {
+   function getIsOwner(address _owner) public view returns (bool) {
       return isOwner[_owner];
    }
 
-   function _confirmations(uint256 _trxId, address _signer) public view returns (bool) {
+   function getConfirmations(uint256 _trxId, address _signer) public view returns (bool) {
       return confirmations[_trxId][_signer];
    }
 
-   function _requiredSigs() public view returns (uint256) {
+   function getRequiredSigs() public view returns (uint256) {
       return requiredSigs;
    }
 
-   function _transactions(uint _trxId) public view returns (Transaction memory) {
+   function getTransactions(uint _trxId) public view returns (Transaction memory) {
       return transactions[_trxId];
    }
 }
