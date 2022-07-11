@@ -6,6 +6,7 @@ import "../interfaces/IERC20.sol";
 contract EasyToken is IERC20 {
    string private constant NOT_ENOUGH_BALANCE_MSG = "Balance is not enough!";
    string private constant NOT_ENOUGH_ALLOWANCE_MSG = "Allowance is not enough!";
+   string private constant TOKEN_HAS_OWNER_ALREADY = "Token has already been owned!";
 
    string private constant _name = "EasyToken";
    string private constant _symbol = "EZT";
@@ -14,9 +15,21 @@ contract EasyToken is IERC20 {
    mapping(address => uint256) balances;
    mapping(address => mapping (address => uint256)) allowed;
 
+   address private tokenOwner = address(0);
+
    constructor(uint256 _supply) {
       _totalSupply = _supply;
-      balances[msg.sender] = _totalSupply;
+   }
+
+   function setTokenOwner() public {
+      require(tokenOwner == address(0), TOKEN_HAS_OWNER_ALREADY);
+      require(msg.sender != address(0), 'Invalid address');
+      tokenOwner = msg.sender;
+      balances[tokenOwner] = _totalSupply;
+   }
+
+   function getTokenOwner() public view returns (address) {
+      return tokenOwner;
    }
 
    modifier balanceSuffices(address _owner, uint256 _token) {

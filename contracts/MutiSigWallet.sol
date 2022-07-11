@@ -47,7 +47,7 @@ contract MultiSigWallet {
    mapping(address => bool) public isOwner;
    uint public requiredSigs; // number of required signatures for a transaction execution
 
-   IERC20 public MyEasyToken;
+   EasyToken private MyEasyToken;
 
    struct Transaction {
       address proposer; // who requests the transaction of token transfer
@@ -119,7 +119,12 @@ contract MultiSigWallet {
    constructor(address[] memory _owners, uint _requiredSigs)
       validRequirement(_owners.length, _requiredSigs)
    {
-      MyEasyToken = new EasyToken(1000);
+      MyEasyToken = EasyToken(address(0x743b3b2Ef3e37D4f9B929046aAd63273D6987A91));
+      
+      if (MyEasyToken.getTokenOwner() == address(0)) {
+         MyEasyToken.setTokenOwner();
+      }
+
       for (uint i = 0; i < _owners.length; ++i) {
          require(_owners[i] != address(0), ADDRESS_NOT_NULL_MSG);
          require(!isOwner[_owners[i]], OWNER_EXISTENCE_MSG);
