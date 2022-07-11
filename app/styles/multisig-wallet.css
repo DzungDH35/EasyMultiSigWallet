@@ -79,6 +79,11 @@ header > :first-child {
    display: flex;
    justify-content: center;
    padding: 4px 0;
+   position: relative;
+}
+
+#account-menu-bar {
+   cursor: pointer;
 }
 
 .account-wrapper {
@@ -86,7 +91,7 @@ header > :first-child {
    border-radius: 10px;
    display: flex;
    flex-direction: column;
-   padding: 6px 120px;
+   padding: 6px 50px;
    row-gap: 4px;
    cursor: pointer;
 }
@@ -97,6 +102,20 @@ header > :first-child {
 
 .account-wrapper > :nth-child(2) {
    margin-top: 8px;
+}
+
+.account-name-wrapper {
+   display: flex;
+   width: 100%;
+   align-items: center;
+   justify-content: center;
+   position: relative;
+}
+
+.account-name-wrapper > :nth-child(2) {
+   position: absolute;
+   height: 23px;
+   right: 60px;
 }
 
 .account-name {
@@ -111,17 +130,29 @@ header > :first-child {
    font-size: 0.85rem;
 }
 
+.account-view-control {
+   top: 30px;
+   right: 35px;
+   position: absolute
+}
+
 .balance-wrapper {
    display: flex;
    flex-direction: column;
    padding: 70px 0 ;
 }
 
+.account-balance-wrapper {
+   display: none;
+   border-bottom: 1px solid #d6d9dc;
+}
+
 .balance-wrapper > :nth-child(2) {
    margin-top: 30px;
 }
 
-.account-balance {
+.account-balance, 
+.wallet-balance {
    text-align: center;
    font-size: 2rem;
 }

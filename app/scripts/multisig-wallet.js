@@ -3,8 +3,9 @@ const MSW_CONTRACT_ADDR = window.sessionStorage.getItem('wallet-contract-address
 
 if (MSW_CONTRACT_ADDR == undefined)
 	window.location.replace(INDEX_URL)
-else
-	document.querySelector('.wallet-address').innerHTML = MSW_CONTRACT_ADDR;
+else {
+	walletViewModel.setAddress(MSW_CONTRACT_ADDR);
+}
 	
 const MSW_CONTRACT_ABI = [
 	{
@@ -137,6 +138,19 @@ const MSW_CONTRACT_ABI = [
 	},
 	{
 		"inputs": [],
+		"name": "getTokenOwner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "name",
 		"outputs": [
 			{
@@ -146,6 +160,13 @@ const MSW_CONTRACT_ABI = [
 			}
 		],
 		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setTokenOwner",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -228,7 +249,7 @@ const MSW_CONTRACT_ABI = [
 		"type": "function"
 	}
 ];
-const TOKEN_CONTRACT_ADDR = '0xaC7d513e9E33FAAb8447Af9624252107A8d280D4';
+const TOKEN_CONTRACT_ADDR = '0x743b3b2Ef3e37D4f9B929046aAd63273D6987A91';
 const TOKEN_CONTRACT_ABI = [
 	{
 		"inputs": [
@@ -360,6 +381,19 @@ const TOKEN_CONTRACT_ABI = [
 	},
 	{
 		"inputs": [],
+		"name": "getTokenOwner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "name",
 		"outputs": [
 			{
@@ -369,6 +403,13 @@ const TOKEN_CONTRACT_ABI = [
 			}
 		],
 		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "setTokenOwner",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -451,6 +492,7 @@ const TOKEN_CONTRACT_ABI = [
 		"type": "function"
 	}
 ];
+
 let mswContract = null;
 const Metamask = window.ethereum;
 const METAMASK_CONNECT_FAILED_MSG = 'Cannot connect to metamask. Please reload the page!';
@@ -467,15 +509,21 @@ function setUpMetaMaskEvent() {
 		if (accountAddresses.length === 0) {
 			window.location.replace(INDEX_URL);
 		} else {
-			accountViewModel.setAddress(accountAddresses[0]);
-			updateViewBasedOnAccount();
+			window.location.reload();
 		}
    });
 
 	Metamask.request({ method: 'eth_requestAccounts' })
       .then(accountAddresses => {
          accountViewModel.setAddress(accountAddresses[0]);
-         updateViewBasedOnAccount();
+
+			mswContract.methods.balanceOf(accountViewModel.address).call((err, tokenBalance) => {
+				accountViewModel.setBalance(tokenBalance);
+			});
+
+			mswContract.methods.getIsOwner(accountViewModel.address).call((err, isWalletOwner) => {
+				accountViewModel.setIsWalletOwner(isWalletOwner);
+			});
       })
       .catch(error => {
          console.log(error);
@@ -495,29 +543,9 @@ function setUpMetaMaskEvent() {
 function setUpViewModel() {
    accountViewModel.setBinding(document.querySelector('.account-address'), 'address');
    accountViewModel.setBinding(document.querySelector('.account-balance'), 'balance');
+	walletViewModel.setBindings(document.querySelector('.wallet-balance'), 'tokenBalance');
+	walletViewModel.setBindings(document.querySelector('.wallet-address'), 'address');
    recordTabs.init();
-}
-
-function updateViewBasedOnAccount() {
-   mswContract.methods.balanceOf(accountViewModel.address).call((err, balance) => {
-      if (err) {
-         console.log(err);
-      } else {
-         accountViewModel.setBalance(balance);
-      }
-   });
-
-   eztContract.methods.name().call((err, tokenName) => {
-      if (err) {
-         console.log(err);
-      } else {
-         accountViewModel.setTokenName(tokenName);
-      }
-   });
-
-	mswContract.methods.isOwner().call((err, res) => {
-		console.log(res);
-	});
 }
 
 function bootstrap() {
@@ -527,11 +555,34 @@ function bootstrap() {
    setUpViewModel();
    setUpMetaMaskEvent();
 
+	walletViewModel.setAddress(MSW_CONTRACT_ADDR);
+
+	mswContract.methods.balanceOf(MSW_CONTRACT_ADDR).call((err, tokenBalance) => {
+		walletViewModel.setTokenBalance(tokenBalance);
+	});
+
+	eztContract.methods.name().call((err, name) => {
+		walletViewModel.setTokenName(name);
+		accountViewModel.setTokenName(name);
+	});
+
+	eztContract.methods.symbol().call((err, symbol) => {
+		walletViewModel.setTokenSymbol(symbol);
+	});
+
    document.getElementById('log-out-wallet').addEventListener('click', event => {
 		if (confirm(WALLET_LOG_OUT_CONFIRM_MSG)) {
 			window.sessionStorage.clear();
 			window.location.replace(INDEX_URL);
 		}
+	});
+
+	document.getElementById('account-menu-bar').addEventListener('click', event => {
+		let isFlexDisplay = document.querySelector("#account-menu-bar").nextElementSibling.style.display === 'flex';
+		let viewControl = isFlexDisplay ? 'up' : 'down';
+		document.querySelector('.account-view-control > i').classList.value = 'arrow' + ' ' + viewControl;
+		document.querySelector('.account-balance-wrapper').style.display = isFlexDisplay ? 'none' : 'flex';
+
 	});
 }
 

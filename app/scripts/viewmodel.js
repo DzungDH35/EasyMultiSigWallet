@@ -6,7 +6,7 @@ let accountViewModel = {
    name: '',
    balance: 0,
    tokenName: '',
-   isOwner: false,
+   isWalletOwner: false,
    bindings: {
       address: [],
       name: [],
@@ -51,8 +51,15 @@ let accountViewModel = {
       }
    },
 
-   setIsOwner: function (isOwner) {
-      this.isOwner = isOwner;
+   setIsWalletOwner: function (isWalletOwner) {
+      this.isWalletOwner = isWalletOwner;
+
+      if (isWalletOwner) {
+         document.querySelector('.account-name-wrapper').insertAdjacentHTML(
+            'beforeend',
+            '<img src="./assets/ownership.png" alt="Wallet Owner">'
+         );
+      }
    },
 
    updateAddressView: function (DOMElement) {
@@ -65,6 +72,56 @@ let accountViewModel = {
 
    updateBalanceView: function (DOMElement) {
       DOMElement.innerHTML  = this.balance + ' ' + this.tokenName;
+   }
+};
+
+let walletViewModel = {
+   address: '',
+   tokenBalance: 0,
+   tokenName: '',
+   tokenSymbol: '',
+   bindings: {
+      tokenBalance: [],
+      address: []
+   },
+   
+   setBindings: function (DOMElement, type) {
+      if (type === 'tokenBalance') {
+         this.bindings.tokenBalance.push(DOMElement);
+      } else if (type === 'address') {
+         this.bindings.address.push(DOMElement);
+      }
+   },
+
+   setTokenBalance: function (tokenBalance) {
+      this.tokenBalance = tokenBalance;
+      this.updateTokenBalanceView();
+   },
+
+   updateTokenBalanceView: function () {
+      for (let boundDOMElement of this.bindings.tokenBalance) {
+         boundDOMElement.innerHTML = this.tokenBalance + ' ' + this.tokenName;
+      }
+   },
+
+   setTokenName: function (name) {
+      this.tokenName = name;
+      this.updateTokenBalanceView();
+   },
+
+   setTokenSymbol: function (symbol) {
+      this.tokenSymbol = symbol;
+   },
+
+   setAddress: function (address) {
+      this.address = address
+      this.updateAddressView();
+   },
+
+   updateAddressView: function () {
+      for (let boundDOMElement of this.bindings.address) {
+         boundDOMElement.innerHTML = this.address;
+      }
    }
 };
 
