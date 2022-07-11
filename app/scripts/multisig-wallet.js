@@ -1,4 +1,8 @@
-const MSW_CONTRACT_ADDR = '0xa22c9d019b0fbe54a26fdb92136770a2495bdfc5';
+const INDEX_URL = '/index.html';
+const MSW_CONTRACT_ADDR = window.sessionStorage.getItem('wallet-contract-address');
+if (MSW_CONTRACT_ADDR == undefined)
+	window.location.replace(INDEX_URL)
+	
 const MSW_CONTRACT_ABI = [
 	{
 		"inputs": [
@@ -445,25 +449,44 @@ const TOKEN_CONTRACT_ABI = [
 	}
 ];
 let mswContract = null;
-const INDEX_URL = '/index.html';
 const Metamask = window.ethereum;
 const METAMASK_CONNECT_FAILED_MSG = 'Cannot connect to metamask. Please reload the page!';
 const METAMASK_ACCOUNT_REQUEST_FAILED_MSG = 'Fail to request for MetaMask accounts!';
+const WALLET_LOG_OUT_CONFIRM_MSG = 'Are you sure you want to log out of your wallet?';
 
 function setUpMetaMaskEvent() {
    let self = this;
+
    Metamask.on('disconnect', error => {
       alert(METAMASK_CONNECT_FAILED_MSG);
       console.log(error);
    });
 
    Metamask.on('accountsChanged', (accountAddresses) => {
-      accountViewModel.setAddress(accountAddresses[0]);
-      updateViewBasedOnAccount();
+		if (accountAddresses.length === 0) {
+			window.location.replace(INDEX_URL);
+		} else {
+			accountViewModel.setAddress(accountAddresses[0]);
+			updateViewBasedOnAccount();
+		}
    });
 
+	Metamask.request({ method: 'eth_requestAccounts' })
+      .then(accountAddresses => {
+         accountViewModel.setAddress(accountAddresses[0]);
+         updateViewBasedOnAccount();
+      })
+      .catch(error => {
+         console.log(error);
+         alert(METAMASK_ACCOUNT_REQUEST_FAILED_MSG);
+      });
+
+	ethereum.request({ method: 'eth_chainId' })
+		.then(chainHexId => {
+			chainNetworkViewModel.setChainId(chainHexId);
+		});
+	
    Metamask.on('chainChanged', (chainId) => {
-      console.log('Chain changed with new id = ' + chainId);
       window.location.reload();
    });
 }
@@ -495,18 +518,15 @@ function bootstrap() {
    mswContract = new web3.eth.Contract(MSW_CONTRACT_ABI, MSW_CONTRACT_ADDR);
    eztContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI, TOKEN_CONTRACT_ADDR);
 
-   setUpMetaMaskEvent();
    setUpViewModel();
+   setUpMetaMaskEvent();
 
-   Metamask.request({ method: 'eth_requestAccounts' })
-      .then(accountAddresses => {
-         accountViewModel.setAddress(accountAddresses[0]);
-         updateViewBasedOnAccount();
-      })
-      .catch(error => {
-         console.log(error);
-         alert(METAMASK_ACCOUNT_REQUEST_FAILED_MSG);
-      });
+   document.getElementById('log-out-wallet').addEventListener('click', event => {
+		if (confirm(WALLET_LOG_OUT_CONFIRM_MSG)) {
+			window.sessionStorage.clear();
+			window.location.replace(INDEX_URL);
+		}
+	});
 }
 
 if (typeof web3 !== 'undefined')

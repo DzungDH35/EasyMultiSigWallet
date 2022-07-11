@@ -24,27 +24,21 @@ document.querySelector('.input-wrapper > input').addEventListener('input', event
 if (Metamask == undefined || !Metamask.isMetaMask) {
    alert(METAMASK_UNINSTALLED_MSG);
 } else {
-   window.ethereum._metamask.isUnlocked()
-   .then(isUnlocked => {
-      if (isUnlocked) {
-         // window.location.replace(MSW_URL);
-      }
-      else {
-         document.querySelector('#connect-metamask').addEventListener('click', event => {
-            event.target.disabled = true;
-         
-            Metamask.request({ method: 'eth_requestAccounts' })
-               .then(data => {
-                  console.log(data);
-                  window.location.replace(MSW_URL);
-               })
-               .catch(error => {
-                  console.log(error);
-                  alert(METAMASK_CONNECT_FAILED);
-                  event.target.disabled = false;
-               })
-         });
-      }
-   })
-   .catch(error => console.log(error));
+   document.querySelector('#connect-metamask').addEventListener('click', event => {
+      event.target.disabled = true;
+      window.sessionStorage.setItem(
+         'wallet-contract-address', document.querySelector('.input-wrapper > input').value
+      )
+   
+      Metamask.request({ method: 'eth_requestAccounts' })
+         .then(data => {
+            console.log(data);
+            window.location.replace(MSW_URL);
+         })
+         .catch(error => {
+            console.log(error);
+            alert(METAMASK_CONNECT_FAILED);
+            event.target.disabled = false;
+         })
+   });
 }

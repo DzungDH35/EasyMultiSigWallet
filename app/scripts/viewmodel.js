@@ -107,3 +107,27 @@ let recordTabs = {
       this.setDefaultActiveTab(document.getElementsByClassName(this.tabClass)[0]);
    }
 };
+
+let chainNetworkViewModel = {
+   chainId: 0,
+   name: {
+      1: 'Ethereum Mainnet',
+      3: 'Ropsten Test Network',
+      4: 'Rinkeby Test Network',
+      5: 'Goerli Test Network',
+      42: 'Kovan Test Network'
+   },
+   bgColor: {
+      1: '#29b6af',
+      3: '#ff4a8d',
+      4: '#f6c343',
+      5: '#3099f2',
+      42: '#9064ff'
+   },
+
+   setChainId: function (newChainHexId) {
+      this.chainId = parseInt(newChainHexId.toString(16), 16);
+      document.querySelector('.chain-symbol').style.backgroundColor = this.bgColor[this.chainId];
+      document.querySelector('.chain-name').innerHTML = this.name[this.chainId]
+   }
+};

@@ -8,9 +8,15 @@
 header {
    display: flex;
    justify-content: center;
-   align-items: center;
    height: 75px;
    background-color: #f2f4f6;
+}
+
+.logo-wrapper {
+   display: flex;
+   flex-basis: 60%;
+   align-items: center;
+   column-gap: 8px;
 }
 
 #login-container {

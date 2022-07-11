@@ -5,11 +5,22 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="./styles/multisig-wallet.css">
-   <title>Multisignature Wallet</title>
+   <link rel="shortcut icon" href="./assets/wallet-favicon.png" type="image/x-icon">
+   <title>Multisig Wallet</title>
 </head>
 <body>
    <div id="multisig-wallet">
-      <header>Header</header>
+      <header>
+         <div class="logo-wrapper">
+            <img src="./assets/wallet-logo.png" alt="Multisignature Wallet">
+            <img src="./assets/text-logo.png" alt="">
+         </div>
+         <div class="chain-network-wrapper">
+            <div class="chain-symbol"></div>
+            <div class="chain-name">Goerli Test Network</div>
+         </div>
+         <button id="log-out-wallet">Log out</button>
+      </header>
       <div id="main-container">
          <div class="home-wrapper">
             <div class="menu-bar">

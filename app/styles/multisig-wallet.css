@@ -13,6 +13,35 @@ header {
    height: 75px;
 }
 
+header > * {
+   flex-shrink: 0;
+}
+
+.logo-wrapper {
+   display: flex;
+   align-items: center;
+   column-gap: 8px;
+}
+
+.chain-network-wrapper {
+   display: flex;
+   align-items: center;
+   column-gap: 10px;
+   margin: 0 50px;
+   padding: 9px 12px;
+   border: 1px solid #bbc0c5;
+   border-radius: 100px;
+}
+
+.chain-symbol {
+   width: 12px; height: 12px;
+   border-radius: 100%;
+}
+
+.chain-name {
+   font-size: 0.8rem;
+}
+
 #main-container {
    display: flex;
    justify-content: center;
