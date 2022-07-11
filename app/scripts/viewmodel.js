@@ -5,6 +5,7 @@ let accountViewModel = {
    address: '0x0000000000000000000000000000000000000000',
    name: '',
    balance: 0,
+   balanceSymbol: '',
    bindings: {
       address: [],
       name: [],
@@ -51,7 +52,7 @@ let accountViewModel = {
    },
 
    updateBalanceView: function (DOMElement) {
-      DOMElement.innerHTML  = this.balance;
+      DOMElement.innerHTML  = this.balance + '' + this.balanceSymbol;
    }
 };
 
