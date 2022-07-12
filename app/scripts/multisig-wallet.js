@@ -1103,7 +1103,23 @@ function bootstrap() {
 						});
 					});
 				}
-			})().catch(err => {
+			})()
+			.then(data => {
+				document.getElementById('all-trx').addEventListener('click', event => {
+					console.log('all')
+					for (let element of document.getElementsByClassName('record-item-executed')) {
+						element.style.display = 'flex';
+					}
+				});
+		
+				document.getElementById('pending-trx').addEventListener('click', event => {
+					console.log('pending')
+					for (let element of document.getElementsByClassName('record-item-executed')) {
+						element.style.display = 'none';
+					}
+				});
+			})
+			.catch(err => {
 				console.error(err);
 			});
 		});

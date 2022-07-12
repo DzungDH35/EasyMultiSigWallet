@@ -282,6 +282,7 @@ let trxViewModel = {
    tokenSelector: '.record-item-token-wrapper > :nth-child(2)',
    currentConfirmSelector: '.record-item-current-confirm',
    requiredSigSelector: '.record-item-required-sigs',
+   recordItem: '.record-item',
 
    renderRecordItem: function() {
       let itemNode = this.itemTemplate.cloneNode(true),
@@ -295,6 +296,10 @@ let trxViewModel = {
          document.querySelectorAll(this.receiptSelector)[i].innerHTML = this.trx[i].destination;
          document.querySelectorAll(this.statusSelector)[i].src = this.trx[i].executed ? this.completeIconSrc : this.pendingIconSrc;
          document.querySelectorAll(this.tokenSelector)[i].innerHTML = this.trx[i].value + ' ' + walletViewModel.tokenSymbol;
+
+         if (this.trx[i].executed) {
+            document.querySelectorAll(this.recordItem)[i].classList.add('record-item-executed');
+         }
       }
    },
 
