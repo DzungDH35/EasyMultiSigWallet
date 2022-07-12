@@ -59,6 +59,9 @@ let accountViewModel = {
             'beforeend',
             '<img src="./assets/ownership.png" alt="Wallet Owner">'
          );
+         document.querySelector('.control-buttons-wrapper').appendChild(
+            document.getElementById('control-button--restricted').content.cloneNode(true)
+         );
       }
    },
 
@@ -189,7 +192,10 @@ let popUpViewModel = {
    data: {
       title: '',
       popupTemplate: document.getElementById('popup-template').content,
-      tokenTransferTemplate: document.getElementById('popup-template--token-transfer').content
+      tokenTransferTemplate: document.getElementById('popup-template--token-transfer').content,
+      signTransactionTemplate: document.getElementById('popup-tempalte--signTransaction').content,
+      addOwnerTemplate: document.getElementById('popup-tempalte--addOwner').content,
+      requiredSigsTemplate: document.getElementById('popup-tempalte--changeRequiredSigs').content,
    },
    selector: {
       identifier: 'overlay-container__popup',
@@ -198,7 +204,9 @@ let popUpViewModel = {
       body: '.popup-body',
       input: '.popup-field-input',
       submit: '.popup-submit-trx',
-      from: '.popup-field__content--from'
+      from: '.popup-field__content--from',
+      signer: '.popup-field__content--signer',
+      owner: '.popup-field__content--owner'
    },
    wrapper: null,
 
@@ -218,7 +226,7 @@ let popUpViewModel = {
       });
 
       if (config.type === 'tokenTransfer') {
-         this.setTitle('Transfer tokens');
+         this.setTitle('Transfer Tokens');
          document.querySelector(this.selector.body).appendChild(this.data.tokenTransferTemplate.cloneNode(true));
          document.querySelector(this.selector.from).innerHTML = config.transferFrom;
 
@@ -230,6 +238,27 @@ let popUpViewModel = {
                document.querySelector(this.selector.submit).disabled = transferTo.value === '' || tokens.value === '';
             });
          }
+      } else if (config.type === 'signTransaction') {
+         this.setTitle('Sign Transaction');
+         document.querySelector(this.selector.body).appendChild(this.data.signTransactionTemplate.cloneNode(true));
+         document.querySelector(this.selector.signer).innerHTML = config.signer;
+         document.querySelector(this.selector.input).addEventListener('input', event => {
+            document.querySelector(this.selector.submit).disabled = event.currentTarget.value === '';
+         });
+      } else if (config.type === 'addOwner') {
+         this.setTitle('Add New Wallet Owner');
+         document.querySelector(this.selector.body).appendChild(this.data.addOwnerTemplate.cloneNode(true));
+         document.querySelector(this.selector.owner).innerHTML = config.owner;
+         document.querySelector(this.selector.input).addEventListener('input', event => {
+            document.querySelector(this.selector.submit).disabled = event.currentTarget.value === '';
+         });
+      } else if (config.type === 'changeRequiredSigs') {
+         this.setTitle('Change Required Signatures');
+         document.querySelector(this.selector.body).appendChild(this.data.requiredSigsTemplate.cloneNode(true));
+         document.querySelector(this.selector.owner).innerHTML = config.owner;
+         document.querySelector(this.selector.input).addEventListener('input', event => {
+            document.querySelector(this.selector.submit).disabled = event.currentTarget.value === '';
+         });
       }
    },
 

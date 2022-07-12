@@ -390,6 +390,12 @@ header > :first-child {
    border-radius: 6px;
 }
 
+#change-required-sigs > .control-button__text {
+   display: flex;
+   flex-wrap: wrap;
+   max-width: 115px;
+}
+
 .popup-submit-trx:not([disabled]):hover {
    background-color: #2295ea;
 }

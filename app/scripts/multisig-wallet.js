@@ -909,6 +909,93 @@ function setUpMetaMaskEvent() {
 
 			mswContract.methods.isOwner(accountViewModel.address).call((err, isWalletOwner) => {
 				accountViewModel.setIsWalletOwner(isWalletOwner);
+
+				if (isWalletOwner) {
+					document.getElementById('sign-transaction').addEventListener('click', event => {
+						popUpViewModel.init({
+							type: 'signTransaction',
+							signer: accountViewModel.address,
+							wrapper: document.querySelector('.overlay-container')
+						});
+	
+						document.querySelector('.popup-submit-trx').addEventListener('click', event => {
+	
+							let submitBtn = event.currentTarget,
+								trxId = document.querySelector('.popup-field-input').value,
+								signer = accountViewModel.address;
+	
+							submitBtn.disabled = true;
+							showLoader();
+	
+							mswContract.methods.confirmations(trxId, signer).call((err, signed) => {
+								if (signed) {
+									hideLoader();
+									alert('You signed this transaction!');
+								} else {
+									mswContract.methods.confirmTransaction(trxId).send({ from: signer }, function (err, data) {
+										console.log(data);
+									})
+									.on('receipt', receipt => {
+										console.log(receipt);
+										alert('The transaction has been successfully signed!');
+										window.location.reload();
+									});
+								}
+							});
+						});
+					});
+
+					document.getElementById('add-owner').addEventListener('click', event => {
+						popUpViewModel.init({
+							type: 'addOwner',
+							owner: accountViewModel.address,
+							wrapper: document.querySelector('.overlay-container')
+						});
+
+						document.querySelector('.popup-submit-trx').addEventListener('click', event => {
+							let submitBtn = event.currentTarget,
+								newOwner = document.querySelector('.popup-field-input').value;
+							
+							submitBtn.disabled = true;
+							showLoader();
+
+							mswContract.methods.addOwner(newOwner).send({ from: accountAddresses.address }, (err, data) => {
+								console.log(data);
+							}).on('receipt', receipt => {
+								console.log(receipt);
+								alert('New wallet owner ' + newOwner + ' has been added!');
+								window.location.reload();
+							});
+						});
+					});
+
+					document.getElementById('change-required-sigs').addEventListener('click', event => {
+						popUpViewModel.init({
+							type: 'changeRequiredSigs',
+							owner: accountViewModel.address,
+							wrapper: document.querySelector('.overlay-container')
+						});
+
+						document.querySelector('.popup-submit-trx').addEventListener('click', event => {
+							let submitBtn = event.currentTarget,
+								newRequiredSigs = document.querySelector('.popup-field-input').value;
+							
+							submitBtn.disabled = true;
+							showLoader();
+
+							mswContract.methods.changeRequirement(newRequiredSigs).send({ from: accountAddresses.address }, (err, data) => {
+								if (err) {
+									console.log(err);
+									alert('Fail to save config!');
+								}
+							}).on('receipt', receipt => {
+								console.log(receipt);
+								alert('Signature requirement has been set to ' + newRequiredSigs);
+								window.location.reload();
+							});
+						});
+					});
+				}
 			});
       })
       .catch(error => {
@@ -983,12 +1070,14 @@ function bootstrap() {
 				tokens = document.querySelectorAll('.popup-field-input')[1].value;
 
 			event.currentTarget.disabled = true;
+			showLoader();
 
 			mswContract.methods
 				.submitTransaction(receipt, tokens)
 				.send({ from: sender }, function (err, data) {
-					popUpViewModel.destroy();
-					window.location.reload();
+					console.log(data);
+			}).on('receipt', receipt => {
+				window.location.reload();
 			});
 		});
 	});
