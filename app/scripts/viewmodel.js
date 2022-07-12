@@ -244,12 +244,38 @@ let trxViewModel = {
    requiredSigs: 0,
    itemTemplate: document.getElementById('record-item').content,
    recordContentSelector: '.record-content-wrapper',
+   proposerSelector: '.record-item-proposer > :nth-child(2)',
+   receiptSelector: '.record-item-receipt > :nth-child(2)',
+   statusSelector: '.record-item-status > img',
+   completeIconSrc: './assets/complete.png',
+   pendingIconSrc: './assets/pending.png',
+   trxIdSelector: '.record-item-trxId > :nth-child(2)',
+   tokenSelector: '.record-item-token-wrapper > :nth-child(2)',
+   currentConfirmSelector: '.record-item-current-confirm',
+   requiredSigSelector: '.record-item-required-sigs',
 
    renderRecordItem: function() {
-      let itemNode = this.itemTemplate.cloneNode(true);
-      
-      for (let transaction of this.trx) {
-         document.querySelector(this.recordContentSelector).appendChild(itemNode);
+      let itemNode = this.itemTemplate.cloneNode(true),
+         wrapper = document.querySelector(this.recordContentSelector)
+         j = 0;
+
+      for (let i = 0; i < this.trx.length; ++i) {
+         wrapper.appendChild(itemNode);
+         document.querySelectorAll(this.trxIdSelector)[i].innerHTML = i;
+         document.querySelectorAll(this.proposerSelector)[i].innerHTML = this.trx[i].proposer;
+         document.querySelectorAll(this.receiptSelector)[i].innerHTML = this.trx[i].destination;
+         document.querySelectorAll(this.statusSelector)[i].src = this.trx[i].executed ? this.completeIconSrc : this.pendingIconSrc;
+         document.querySelectorAll(this.tokenSelector)[i].innerHTML = this.trx[i].value + ' ' + walletViewModel.tokenSymbol;
       }
+   },
+
+   setConfirmCount: function (confirmCount, trxId) {
+      this.trx[trxId].confirmCount = confirmCount;
+      document.querySelectorAll(this.currentConfirmSelector)[trxId].innerHTML = confirmCount;
+      document.querySelectorAll(this.requiredSigSelector)[trxId].innerHTML = this.requiredSigs;
+   },
+
+   setRequiredSigs: function (requiredSigs) {
+      this.requiredSigs = requiredSigs;
    }
 };

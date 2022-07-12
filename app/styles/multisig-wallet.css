@@ -237,6 +237,11 @@ header > :first-child {
    row-gap: 10px;
 }
 
+.record-content-wrapper {
+   display: flex;
+   flex-direction: column-reverse;
+}
+
 .record-item__right-wrapper {
    display: flex;
    align-items: center;
@@ -250,12 +255,6 @@ header > :first-child {
    display: flex;
    font-size: 0.85rem;
    column-gap: 5px;
-}
-
-.record-item-status {
-   width: 24px;
-   height: 24px;
-   border: 1px solid #000;
 }
 
 .record-item-flow-wrapper {
