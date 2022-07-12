@@ -959,8 +959,14 @@ function setUpMetaMaskEvent() {
 							submitBtn.disabled = true;
 							showLoader();
 
-							mswContract.methods.addOwner(newOwner).send({ from: accountAddresses.address }, (err, data) => {
-								console.log(data);
+							mswContract.methods.addOwner(newOwner).send({ from: accountViewModel.address }, (err, data) => {
+								if (err) {
+									console.log(err);
+									alert('Failed to add a new owner');
+									hideLoader();
+								} else {
+									console.log(data);
+								}
 							}).on('receipt', receipt => {
 								console.log(receipt);
 								alert('New wallet owner ' + newOwner + ' has been added!');
